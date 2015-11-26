@@ -1,11 +1,6 @@
-function result = test()
+function result = testcpx()
 
-	% 获得当前脚本文件名，将父目录添加到 path 中
-	% 以便能用上层目录中的函数
-	filename = mfilename('fullpath');
-	[pathstr, name, ext] = fileparts(filename);
-	parent = regexprep(pathstr, '\w+$', '');
-	addpath(parent);
+	parent = addParentPath();
 
 	% 单位 A 的基本属性
 	A.hp = 100;
@@ -30,6 +25,7 @@ function result = test()
 
 	% 第2个单位（B）超时算输
 	% 也即第1个单位（A）只要坚持一定回合算赢
+	% 但第1个单位的失败条件仍默认是到 0 血
 	option = struct;
 	option.fail2 = @failtime;
 	vic = cpxbattle(A, B, @equsample, option);

@@ -1,10 +1,4 @@
-% 获得当前脚本文件名，将父目录添加到 path 中
-% 以便能用上层目录中的函数
-filename = mfilename('fullpath');
-[pathstr, name, ext] = fileparts(filename);
-parent = regexprep(pathstr, '\w+$', '');
-addpath(parent);
-
+parent = addParentPath();
 
 % 设定战斗双方的基本属性
 A.hp = 100;
