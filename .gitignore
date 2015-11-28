@@ -6,3 +6,8 @@
 Session.vim
 .netrwhist
 *~
+
+# matlab file ignore
+*.asv
+*_ar.mat
+*_ws.mat
