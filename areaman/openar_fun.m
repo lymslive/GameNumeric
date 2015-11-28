@@ -17,7 +17,7 @@ if ~strcmp(prj.base, pwd)
 end
 
 % 将项目的 .subpath 各子目录添加至 Matlab 搜索路径 path
-if isfield(prj.subpath) && iscellstr(prj.subpath)
+if isfield(prj, 'subpath') && iscellstr(prj.subpath)
 	for i = 1 : length(prj.subpath)
 		sub = prj.subpath{i};
 		fullpath = [prj.base, filesep, sub];

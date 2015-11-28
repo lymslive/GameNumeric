@@ -34,7 +34,7 @@ else
 		a_list = dir('*_ar.mat');
 		a_prjname = a_list(1).name;
 		Area_ = openar_fun(a_prjname);
-		load(Area_.worksapce);
+		load(Area_.workspace);
 
 		disp(['Area is opend: ', Area_.name]);
 		hisarea(Area_.base, Area_.project);
@@ -53,7 +53,7 @@ else
 			[a_dir, a_file] = areas(0);
 			cd(a_dir);
 			Area_ = openar_fun(a_file);
-			load(Area_.worksapce);
+			load(Area_.workspace);
 			disp(['Area is opend: ', Area_.name]);
 			clear -regexp ^a_;
 		else

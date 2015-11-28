@@ -31,7 +31,7 @@ end
 
 thisfile = mfilename('fullpath');
 pathstr = fileparts(thisfile);
-matfile = [pathstr filespe 'areas_ls.mat'];
+matfile = [pathstr, filesep, 'areas_ls.mat'];
 
 if 2 == exist(matfile, 'file')
 	list = load(matfile);
@@ -48,15 +48,15 @@ if ~isfield(list, 'area')
 end
 
 % 不重复添加最近一个项目
-if strcmp(list.area{end, 1}, basedir)
+if ~strcmp(list.area{end, 1}, basedir)
 	len = size(list.area, 1);
 	if len < list.capacity
-		list{len + 1, 1} = basedir;
-		list{len + 1, 2} = prjfile;
+		list.area{len + 1, 1} = basedir;
+		list.area{len + 1, 2} = prjfile;
 	else
-		list([1 : len-1], :) = list([2 : len], :);
-		list{len, 1} = basedir;
-		list{len, 2} = prjfile;
+		list.area([1 : len-1], :) = list.area([2 : len], :);
+		list.area{len, 1} = basedir;
+		list.area{len, 2} = prjfile;
 	end
 end
 

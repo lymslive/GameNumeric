@@ -9,7 +9,13 @@
 if 1 == exist('Area_')
 
 	a_workspace = [Area_.base, filesep, Area_.workspace];
-	save(a_workspace, '-regexp', Area_.filter);
+	try
+		save(a_workspace, '-regexp', Area_.filter);
+		disp(['save workspace to:', a_workspace]);
+	catch
+		disp('No variables in  workspace need to save');
+	end
+
 	a_project = [Area_.base, filesep, Area_.project];
 	save(a_project, '-struct', 'Area_');
 

@@ -19,9 +19,6 @@
 
 function [basedir, prjfile] = areas(rindex)
 
-basedir = '';
-prjfile = '';
-
 if 2 == exist('areas_ls.mat', 'file')
 	list = load('areas_ls.mat');
 	if isfield(list, 'area') 

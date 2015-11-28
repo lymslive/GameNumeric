@@ -49,13 +49,13 @@ prj.project = [name, '_ar.mat'];
 
 % 当前路径也加入路径，让 Matlab 进入子目录时仍可用
 prj.subpath = {};
-prj.subpath{1} = prj.base;
+prj.subpath{1} = '.';
 
 % 如果子目录有 .m 或 .mat ，则添加到 .subpath
 % 只搜索直接子目录，不递归
 sublist = dir();
 for i = 1 : length(sublist)
-	sub = sublist(1)
+	sub = sublist(i);
 	if sub.isdir && ~strcmp(sub.name, '.') && ~strcmp(sub.name, '..')
 		if length( dir([sub.name, filesep, '*.m']) ) > 0 ... 
 			|| length( dir([sub.name, filesep, '*.mat']) ) > 0 
@@ -69,12 +69,12 @@ prj.filter = '^[a-zA-Z]{4,}$';
 
 % 保存项目信息文件 
 save(prj.project, '-struct', 'prj');
-disp(['Create and saved: ', filename]);
+disp(['Create and saved: ', prj.project]);
 
 % 保存工作区数据文件，新项目初始只有示例 ans 变量
 ans = ['New area: ' name];
 save(prj.workspace, 'ans');
-disp(['Create and saved: ', parj.workspace]);
+disp(['Create and saved: ', prj.workspace]);
 
 area = prj;
 
