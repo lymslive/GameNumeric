@@ -15,7 +15,7 @@ areaman 工具内容与开发笔记
 为避免污染主工作区的变量，脚本尽量少用中间变量，要用到时以 a_* 前缀命名，脚本
 最后用 `clear -regexp ^a_` 清理临时变量。
 
-其他可用函数'^[a-zA-Z]{4,}$'调用解决的，则改为在函数栈内处理。如子目录的向搜索路径中的添加与删
+其他可用函数调用解决的，则改为在函数栈内处理。如子目录的向搜索路径中的添加与删
 除。
 
 在所管理的项目主目录下面生成两个数据文件：
@@ -41,7 +41,7 @@ name_ar.mat 中存在的变量（域名），在 newar_fun 中生成：
 -------
 
 * hisarea(basedir, prjfile)  在末尾添加一项记录
-* [basedir, prjfile] = areas(rindex) 获取一项记录可查看所有记录
+* [basedir, prjfile] = areas(rindex) 获取一项记录，或查看所有记录
 * areas_ls.mat 项目记录数据，由 hisarea() 生成与修改
 
 areas_ls.mat 所含变量（域名结构）:
