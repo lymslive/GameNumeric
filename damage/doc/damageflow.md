@@ -169,5 +169,5 @@ k 倍，再额外增加 b 点伤害。
 - 减法公式：equsubtract.m
 - 乘法公式：equmultiply.m
 - 除法公式：equdivide.m
-- 比率公式：vsrate.m
+- 比率公式：fracrate.m
 - 伤害流模型：dgflow.m
