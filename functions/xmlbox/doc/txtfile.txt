@@ -1,0 +1,157 @@
+txtfile 文件文件对象，句柄类对象
+
+设计目的：
+	
+	用于处理一个文本文件，或可派生 xmlfile 对象，处理简单的 xml 文件。
+	txtfile 基类用于实现常规文本文件的读写、查看、修改等操作。
+	将文本文件视为按行分隔的字串列表，用 cellstr 列向量表示。
+
+
+公有成员：
+
+	文件名全路径
+	fullpath; % assioate with a phyical file
+
+私有成员：
+
+	元胞列向量储存每一行，不带行末换行符
+	content; % cell array of string, m*1
+	一个代表当前行的指针，用于实现指针式的遍历迭代，初始化为1
+	lineno;  % current line number, act as pointer
+	
+	bug: 私有成员怎么也可直接读取了？
+
+非独立变量：
+
+	文件总行数
+	count;     % how many lines
+	去除路径的文件名
+	filename;  % filename with extention but path
+
+静态常量：
+
+	预览行数，用于 head tail 方法
+	preview = 10; % perview lines when head or tail called
+
+
+构造方法：
+
+1. txt = txtfile(fullpath)
+	传入一个字符串，认为是文件名，将读入该文件内容
+2. txt = txtfile(cellstring)
+	传入一个字符元胞，规范地将其转化为列向量，作为文件内容，文件名留空
+
+读取方法：
+
+	获得非独立变量
+	count = get.count(obj)
+	filename  = get.filename(obj);
+	限定当前行指针赋值，可在前后超出1行表示bof与eof，方便判断迭代
+	obj = set.lineno(obj, lineno)
+
+读写方法：
+
+	读自或写入保存在 fullpath 的文件中，也可以提供另一个文件名
+	如果提供了另一个文件名，则更新对象的 fullpath 属性
+	读写成功返回0，失败返回-1（更可能是中止程序）
+	ST = read(obj, file)
+	ST = write(obj, file)
+	判断保存在对象本身的 fullpath 文件是否有效
+	tf = ready(obj)
+
+遍历方法：
+
+function [str msg] = line(obj, start, stop)
+	.line 方法用于取出当前行
+	.line(no) 提供一个额外参数取出特定行
+	.line(b, e) 提供两个参数取出一个区间的所有行，返回字符元胞列向量
+	若行号超出范围，返回空串，但这无法与文件中实际的空行相区别
+	msg 本想接收 "EOF" 或 "BOF" 错误信息，不过由于重载 subsref bug，不可用
+	按第三种方式范围行号越界时，可自行截断
+	但调用者要保证大小前后关系，否则返回空元胞
+
+function str = next(obj, step)
+	.next 取出当前行，并将当前行指针移到下一行
+function str = prev(obj, step)
+	.prev 取出当前行，并将当前行指针移到上一行
+	next 与 prev 调用 line 取出当前行，可提供一个额外参数，表示移动多行
+	指针可临时多移出一行，即 end+1 或 0
+
+function tf = eof(obj)
+function tf = bof(obj)
+	判断是否在文件开始（当前行.lineno小于1）或结束（当前行比最大行还大）
+function lineno = rewind(obj, arg)
+	将当前行指针移到文件内容第一行(arg==1)或最后行(arg==-1)
+	注意 .rewind 重设 .lineno 后，.bof 或 .eof 判断不返回 true
+	例如：rewind 到 lineno = 1，但 lineno = 0 才是 bof
+function [lineno msg] = tell(obj, newpos)
+	返回当前行指针，如果提供额外参数，则重设当前行指针
+	msg 本想接受 EOF 或 BOF 错误信息，但有重载bug
+function ST = seek(obj, offset, origin)
+	偏移当前行指针，origin 可选值有：'bof', 'eof', 'cof'(默认)
+	cof 表示根据当前位置前后移动几行
+	bof 表示正数第几行
+	eof 表示倒数第几行
+	再次强调：bof eof 代表的行号在这几个方法实现中有微妙差别，主要从使用自然考虑
+
+查看方法：
+
+	打印一些文本行到屏幕上
+function vlines = view(obj, start, stop)
+	.view 打印一个范围内的所有行，缺省或越界自动设为第一行或最后一行
+function vlines = head(obj, num)
+	.head 预览前几行
+function vlines = tail(obj, num)
+	.tail 预览最后几行
+	这几个方法返回实行打印的行数
+
+编辑方法：
+
+function oldstr = edit(obj, newstr, lineno)
+	用 newstr 替换当前行，或指定行，newstr 只能是单行字符串
+	返回旧行字符串
+function oldstr = delete(obj, lineno)
+	删除当前行或指定行
+	删除操作比较危险，暂不提供直接删除连续区间所有行的方法
+
+function lines = insert(obj, newstr, lineno)
+	在当前行或指定行前插入新行，可以是单行字符串，或字符串元胞数组
+	输入的 newstr 元胞矩阵都会转成列向量形状
+function lines = append(obj, newstr, lineno)
+	在当前行或指定行后添加一行，调用 .insert 实现
+	注意：在远离最后一行处添加或插入，都只会加在最后，不会产出额外空行
+function lines = cat(obj, newstr)
+	在文件末尾添加行，newstr 可以是单行，或字符元胞组，或另一个txtfile对象
+	insert, append, cat 返回实际增加的行数
+
+TODO: 是否要增加 .insert 方法也支持另一个 txtfile 对象
+
+定制方法：
+
+function str = char(obj)
+	将整个文件（字串元胞组）转化为一个字串变量，添加换行符\n
+function disp(obj)
+	快捷显示文件名及总行数
+function st = saveobj(obj)
+function obj = loadobj(st)
+	保存载入文件
+
+重载方法：
+
+function sref = subsref(obj, s)
+function obj = subsasgn(obj, s, val)
+	重载{}，obj{} 相当于 obj.content{}
+	快捷读写内容行，基本可替换 next prev eof bof 待遍历方法
+	若直接为一个大数索引赋值 obj{999...} = string, 在扩展 .content, 产生空行
+	{}赋值只接收字符串，无法同时赋值多行，因为
+	不重载()默认表示的对象数组含义，仍可用到一组 txtfile 对象表示一系列文件
+function c = plus(a, b)
+	两个文件相加，表示串接生成一个新文件
+
+其他方法：
+
+function newstr = chomp(str)
+	去除行末回车或换行符，但不管行内可能有意义的回车换行符
+	静态方法。
+	注：matlab 内置方法 strtrim 可剪除前导与后缀空白字符，deblank只除后缀空白
+	空白字符 isspace 包括回车换行符

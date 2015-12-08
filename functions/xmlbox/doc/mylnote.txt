@@ -1,0 +1,89 @@
+matlab 处理 xml 学习笔记：
+
+一、 matlab help
+
+内置 xmlread.m 与 xmlwrite.m，将 xml 文件转化为 Jave DOM，也有 xslt 转化函数。
+这是 matlab 处理 xml 的基础。
+问题：DOM 接口语法复杂，因 dom 目标是语言无关，使编程风格非 matlab 化。
+重新写入只保证 dom 模型一致，但 xml 文件有差异：
+属性被 xmlread.m 按字母序重排，不是按原文件属性位置
+xmlread.m 会将元素间的回车与缩进当作一个文本结点，写入时增加了空行。
+
+myXMLwrite 可解决多余空行问题
+
+help 中有个例子，将原始dom对象转化为matlab嵌套结构
+但保留了空白文本结构，用处不大，只为语法示例
+
+二、matlab 包装插件
+官网主页上能下载不少其他用户写的 m 脚本，根据不同需求包装，简化使用
+http://www.mathworks.cn/matlabcentral/fileexchange
+
+2.1 xml_io_tool
+Written by Jarek Tuszynski, SAIC, jaroslaw.w.tuszynski_at_saic.com
+
+该工具比较大，可通过配置将 dom 转化为 struct 或 cell array，但也因此比较复杂。
+提供 xml_read.m xml_write.m 对内置 xmlread.m 与 xmlwrite 进行包装，有配置参数
+Pref 控制细节。似乎还支持 xml 内的二进制数据。
+
+问题：因为通用，处理细节较多，读写比较慢
+转化为 matlab 结构后，移除了根结点，重写入时可以指定不同的根元素名称
+这在要写成与原文件一致更麻烦，默认配置下还添加许多 <item> 元素
+属性也会重排。
+
+总体不喜欢，不过提供了 gen_object_display，显示结构方便点
+
+2.2 xml2struct struct2xml
+by Wouter Falkena
+
+在dom与 matlab struct 之间互转，也即 xml 的读写功能
+比 xml_io_tool 读写快，轻量级，会忽略注释，重写入没有多余空行
+不会添加额外元素，但属性也会按字母序重排
+
+保留根元素节点
+执行 xst = xml2struct(xmlfile) 后
+xst 相当于文档结节(/)，它只有一个域名，即 xmlfile 的根元素
+xst.rootname
+如果第一层struct不止一个域，则它认为不是一个 xml 结构，试图写入时出错
+There should be a single field in the main structure.
+(xml_io_tool 移除了根结点，变量本身不包含 rootname 信息）
+(不同作者的考虑不一样)
+多个子同名元素用 cell array (1*m) 表示，每个 cell 一个元素结点，即
+matlab:struct，它不用 struct array，可能是允许每个子元素有不同的域结构
+(xml元素可能忽略可选的属性或子元素）
+元素的文本内容用 .Text 表示，属性用 .Attributes 表示
+子元素即用元素名作域名，元素排在 .Text 与 .Attributes 之前
+
+2.3 XMLNode
+by Jarrod Rivituso
+
+一个支持 xpath 的 matlab 包装 dom 类
+重载了 . () {} 索引意义
+可以用 . 逐级引用深层元素，但不能用 . 引用属性
+索引括号内的字符串当作 xpath 表达式
+() 返回 XMLNode 对象
+{} 返回 matlab 数据，如果不能转化为 double array，即用 cell-array
+
+可以用中间变量保存子节点，但共用底层 dom 对象
+实际上一个 XMLNode 保存了 dom 对象与当前路径
+
+该类对象只能取值，不能赋值
+
+2.4 直接用 xpath 的例子
+import javax.xml.xpath.*
+可直接在 matlab 用 java 的 xpath 包
+TODO: 好好研究该例子，看是否能支持赋值修改
+getXML(dom, xpath)
+setXML(dom, xpath)
+自己写的qxml可用于单列数据读取
+
+三、总结
+
+读取容易，已经标准化
+但操作可以复杂，需要个性化封装，简化使用语法
+写入复原比较难办，dom能表达唯一的逻辑结构，但不管文本结构
+xml 的属性本来就不限顺序的
+要保持文本结构，可能得用其他办法
+
+matlab 可直接使用 java 包的对象
+得学习下 java
+
