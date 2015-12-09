@@ -27,7 +27,7 @@ case '.'
 			out = [];
 		end
 		if length(index) > 1
-			out = subref(out, index(2:end));
+			out = subsref(out, index(2:end));
 		end
 	end
 
