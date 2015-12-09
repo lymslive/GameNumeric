@@ -9,6 +9,5 @@ Session.vim
 
 # matlab file ignore
 *.asv
-*_ar.mat
-*_ws.mat
-matlab.mat
+*.mat
+*.mat
