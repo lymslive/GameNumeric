@@ -7,41 +7,46 @@
 %  如果也没有 File_ 域，则使用对象的变量名，或者用 ans
 %
 % 输出参数：
-% @file: 实际保存的路径全名, 
+% @outfile: 实际保存的路径全名, 
 %
 % 保存的文件会更新 File_ 变量，但对象本身的 stin_.File_ 域不更新
 %
 % maintain: lymslive / 2015-12-05
-function file = savemat(me, file)
+function outfile = savemat(me, file)
 
 if isempty(me.stin_)
-	file = [];
-	disp('The object seems empty, no need to save');
-	return;
+    file = [];
+    disp('The object seems empty, no need to save');
+    return;
 end
 
 if nargin < 2 || isempty(file)
-	file = me.get('File_');
-	if isempty(file)
-		file = inputname(1);
-	end
-	if isempty(file)
-		file = 'ans';
-	end
+    file = me.get('File_');
+    if isempty(file)
+        file = inputname(1);
+    end
+    if isempty(file)
+        file = 'ans';
+    end
 end
 
 if ~ischar(file) || size(file, 1) > 1
-	error('user:hstruct:savemat', 'expect a string as filename');
+    error('user:hstruct:savemat', 'expect a string as filename');
 end
 
 if length(file) < 5 || ~strcmp(file(end-3:end), '.mat')
-	file = [file, '.mat'];
+    file = [file, '.mat'];
 end
 
 st = me.struct();
 if ~strcmp(me.get('File_'), file)
-	st.File_ = file;
+    st.File_ = file;
 end
 save(file, '-struct', 'st');
+
+disp(['save struct to: ' file]);
+if nargout > 0
+    outfile = file;
+end
 
 end %F

@@ -13,6 +13,8 @@
 % 构造函数：
 % me = hstruct(st)
 % 接收一个 struct 输入参数，返回包装后的对象
+% 可接收一个表示 mat 数据文件名字的字符串，则从文件加载 struct
+% 若字符串不是可加载文件，会抛错
 % 可空参，可 struct 数组，则返回 hstruct 对象同维数组
 %
 % maintain: lymslive / 2015-12-04
@@ -26,18 +28,24 @@ methods
 function me = hstruct(st)
 
 if nargin == 0
-	st.Class_ = 'hstruct';
+    st.Class_ = 'hstruct';
+elseif ischar(st)
+    try
+        st = load(st);
+    catch
+        error('fail to load struct form file');
+    end
 elseif ~isstruct(st)
-	error('user:hstruct:ctor', 'hstruct ctor expects struct');
+    error('user:hstruct:ctor', 'hstruct ctor expects struct');
 end
 
-if numel(st) == 1
-	me.stin_ = st;
+if numel(st) <= 1
+    me.stin_ = st;
 else
-	for i = numel(st) : -1 : 1
-		me(i, 1).stin_ = st(i);
-	end
-	me = reshape(me, size(st));
+    for i = numel(st) : -1 : 1
+        me(i, 1).stin_ = st(i);
+    end
+    me = reshape(me, size(st));
 end
 
 end %ctor
