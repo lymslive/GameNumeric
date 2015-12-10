@@ -6,7 +6,7 @@ function v = cat(me)
 v = me.top(1);
 for i = me.count : -1 : 2
     try
-        v(i) = me.top(i);
+        v(i,1) = me.top(i);
     catch
         v = [];
         return;

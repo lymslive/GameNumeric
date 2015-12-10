@@ -20,7 +20,7 @@ if ~isnumeric(index) || numel(index) ~= 1
     error('push@cLisst: the position expects a scalar number ');
 end
 
-val = me.top{index};
+val = me.top(index);
 me.list_(index) = [];
 
 end %F

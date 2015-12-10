@@ -12,6 +12,7 @@ function me = push(me, index, val)
 % requirement:
 %   the index should be a scalar number between 1 and me.count + 1,
 %   or the index will be cutted if to small or too large.
+%   the val shoul not be empty.
 %
 % maintain: lymslive / 2015-12-09
 
@@ -39,6 +40,14 @@ otherwise
     error('push@cList: to many input argumnet');
 end %S
 
+if isempty(val)
+    error('push@cList: refuse to push emtpy element');
+end
+
+if me.isemptied()
+    me.list_ = {val};
+    return;
+end
 
 list = cell(me.count + 1, 1);
 
@@ -46,7 +55,7 @@ if index > 1
     list(1 : index-1) = me.list_(1 : index-1);
 end
 
-list(index) = val;
+list(index) = {val};
 
 if index <= me.count
     list(index+1 : end) = me.list(index : end);

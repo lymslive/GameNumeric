@@ -11,7 +11,14 @@ function val = top(me, index)
 %   the index should be a scalar number between 1 and me.count,
 %   otherwise throw a error.
 %
+% trigger error when top on a empty list.
+%
 % maintain: lymslive / 2015-12-09
+
+if me.isemptied()
+    error('top@cList: try to operate on empty list with no element at all');
+end
+
 if nargin < 2
     val = me.list_{end};
 else

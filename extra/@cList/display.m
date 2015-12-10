@@ -19,9 +19,9 @@ end
 fprintf('=cList object, with [%d] elements of <%s> type.\n', me.count, t);
 
 if ~strcmp(t, 'Mixed')
-    if isnumeric(t)
+    if isnumeric(me.top())
         s_listNumber(me, maxdisp);
-    elseif ischar(t)
+    elseif ischar(me.top())
         s_listString(me, maxdisp);
     end
 end
@@ -36,7 +36,7 @@ function s_listNumber(me, maxel)
 
 n = 0;
 for i = me.count : -1 : 1
-    fprintf('%d:\t%s\n',  i, num2str(me.top(i));
+    fprintf('%d:\t%s\n',  i, num2str(me.top(i)));
     n = n + 1;
     if n >= maxel
         break;

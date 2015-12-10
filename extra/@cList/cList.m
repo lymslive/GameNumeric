@@ -14,7 +14,7 @@
 %   me = cList(a, b, c, ...); more input, than deal to each cell
 %
 % maintain: lymslive / 2015-12-09
-class cList < handle
+classdef cList < handle
 
 properties (Access = protected)
 list_;
@@ -64,13 +64,13 @@ end %F ctor
 
 function val = get.count(me)
 try
-    val = numel(m_list);
+    val = numel(me.list_);
 catch
     val = 0;
 end
 end %F get
 
-function me = set.list_(val)
+function set.list_(me, val)
 if ~iscell(val)
     error('cList.list_ expects a cell column vector');
 end
@@ -84,6 +84,10 @@ function c = cell(me)
 c = me.list_;
 end %
 
+end %M
+
+methods (Static)
+tf = main_(varargin);
 end %M
 
 end %C
