@@ -1,17 +1,17 @@
-% mat2xfrag å°†ä¸€ä¸ª matlab å˜é‡ï¼ŒçŸ©é˜µï¼Œä¿å­˜ä¸º xml-frag ç‰‡æ–­
-% è¾“å…¥å‚æ•°ï¼š
-%   leader: å‰å¯¼ç¼©è¿›é‡ï¼Œæ•´æ•°ï¼Œä»£è¡¨ç¼©è¿›å‡ ä¸ªåˆ¶è¡¨ç¬¦ï¼Œä¹Ÿè¡¨ç¤ºå±‚æ¬¡æ„ä¹‰
-%   var:  ä¸€ä¸ª matlabe å˜é‡ï¼Œä»…æ”¯æŒæ™®é€šçŸ©é˜µåŠç®€å•å…ƒèƒçŸ©é˜µ
-%   name: ä¿å­˜çš„å˜é‡åï¼Œå³ xml å…ƒç´ æ ‡ç­¾
-%   atname: å±æ€§åï¼Œæ•°æ®ä¿å­˜äºå…ƒç´ çš„å±æ€§ä¸‹ï¼Œcellstr
-% è¾“å‡ºå‚æ•°ï¼š
-%   xmlstr: xmlæ ¼å¼åŒ–çš„å­—ç¬¦ä¸²
+% mat2xfrag ½«Ò»¸ö matlab ±äÁ¿£¬¾ØÕó£¬±£´æÎª xml-frag Æ¬¶Ï
+% ÊäÈë²ÎÊı£º
+%   leader: Ç°µ¼Ëõ½øÁ¿£¬ÕûÊı£¬´ú±íËõ½ø¼¸¸öÖÆ±í·û£¬Ò²±íÊ¾²ã´ÎÒâÒå
+%   var:  Ò»¸ö matlabe ±äÁ¿£¬½öÖ§³ÖÆÕÍ¨¾ØÕó¼°¼òµ¥Ôª°û¾ØÕó
+%   name: ±£´æµÄ±äÁ¿Ãû£¬¼´ xml ÔªËØ±êÇ©
+%   atname: ÊôĞÔÃû£¬Êı¾İ±£´æÓÚÔªËØµÄÊôĞÔÏÂ£¬cellstr
+% Êä³ö²ÎÊı£º
+%   xmlstr: xml¸ñÊ½»¯µÄ×Ö·û´®
 %
-% ç®—æ³•è¯´æ˜ï¼š
-%   1. è¾“å‡º xml ç‰‡æ–­ï¼Œæ— æ ¹å…ƒç´ 
-%   2. ç›®å‰æ”¯æŒçš„å˜é‡ç±»å‹æœ‰ï¼šå­—ç¬¦ä¸²ï¼Œæ•°å€¼çŸ©é˜µï¼Œç®€å•å†…å®¹çš„å…ƒèƒçŸ©é˜µ
-%   3. struct å˜é‡æ”¯æŒé€’å½’ï¼Œæ­¤æ—¶å¿½ç•¥åˆ—å atnameï¼Œæˆå‘˜å˜é‡ä»…èƒ½ç”¨é»˜è®¤åˆ—å
-%   4. æ¯ä¸ªå…ƒç´ ä¸€è¡Œï¼Œè¡Œæœ«æœ‰æ¢è¡Œç¬¦"\n"
+% Ëã·¨ËµÃ÷£º
+%   1. Êä³ö xml Æ¬¶Ï£¬ÎŞ¸ùÔªËØ
+%   2. Ä¿Ç°Ö§³ÖµÄ±äÁ¿ÀàĞÍÓĞ£º×Ö·û´®£¬ÊıÖµ¾ØÕó£¬¼òµ¥ÄÚÈİµÄÔª°û¾ØÕó£¬¼òµ¥±í
+%   3. struct ±äÁ¿Ö§³Öµİ¹é£¬´ËÊ±ºöÂÔÁĞÃû atname£¬³ÉÔ±±äÁ¿½öÄÜÓÃÄ¬ÈÏÁĞÃû
+%   4. Ã¿¸öÔªËØÒ»ĞĞ£¬ĞĞÄ©ÓĞ»»ĞĞ·û"\n"
 %
 % lymsive / 2015-01
 
@@ -19,29 +19,37 @@ function xmlstr = mat2xfrag(leader, var, name, atname)
 
 Debug = false;
 if Debug && nargin < 1
-	s_test();
-	xmlstr = 'Debug mode test end!';
-	return;
+    s_test();
+    xmlstr = 'Debug mode test end!';
+    return;
 end
 
-% å°†ä¸€ä¸ªåˆ¶è¡¨ç¬¦ä½œä¸ºç¼©è¿›
+% ½«Ò»¸öÖÆ±í·û×÷ÎªËõ½ø
 TABchar = 9;
 sIndent = TABchar;
 if isempty(leader)
-	nIndent = 0;
+    nIndent = 0;
 else
-	nIndent = leader;
+    nIndent = leader;
 end
 indstr  = repmat(sIndent, 1, nIndent);
 
 unknown = '#unknown';
 
-% é»˜è®¤å˜é‡å
+% Ä¬ÈÏ±äÁ¿Ãû
 if nargin < 3 || isempty(name)
-	name = 'var';
+    name = class(var);
 end
 if nargin < 4
-	atname = '';
+    atname = '';
+end
+
+% table ×ªÎª cell ±£´æ
+if istable(var)
+    if isempty(atname)
+        atname = var.Properties.VariableNames;
+    end
+    var = table2cell(var);
 end
 
 [m, n] = size(var);
@@ -49,137 +57,148 @@ end
 xmlstr = '';
 if ischar(var) % string
 
-	for i = 1 : m
-		text = [indstr, '<', name];
-		colname = s_getColName(1, atname);
-		text = sprintf('%s %s="%s"', text, colname, var(i,:));
-		text = sprintf('%s/>\n', text);
-		xmlstr = [xmlstr text];
-	end
+    for i = 1 : m
+        text = [indstr, '<', name];
+        colname = s_getColName(1, atname);
+        text = sprintf('%s %s="%s"', text, colname, var(i,:));
+        text = sprintf('%s/>\n', text);
+        xmlstr = [xmlstr text];
+    end
 
 elseif isnumeric(var) || islogical(var) % double matrix etc
-	
-	for i = 1 : m
-		text = [indstr, '<', name];
-		for j = 1 : n
-			colname = s_getColName(j, atname);
-			text = sprintf('%s %s="%g"', text, colname, var(i,j));
-		end
-		text = sprintf('%s/>\n', text);
-		xmlstr = [xmlstr text];
-	end
+    
+    for i = 1 : m
+        text = [indstr, '<', name];
+        for j = 1 : n
+            colname = s_getColName(j, atname);
+            text = sprintf('%s %s="%g"', text, colname, var(i,j));
+        end
+        text = sprintf('%s/>\n', text);
+        xmlstr = [xmlstr text];
+    end
 
 elseif iscell(var)
 
-	if s_simpleCell(var) % simple cell matrix
-		for i = 1 : m
-			text = [indstr, '<', name];
-			for j = 1 : n
-				colname = s_getColName(j, atname);
-				colvalue = var{i,j};
-				if isnumeric(colvalue) || islogical(colvalue)
-					text = sprintf('%s %s="%g"', text, colname, colvalue);
-				elseif ischar(colvalue)
-					text = sprintf('%s %s="%s"', text, colname, colvalue);
-				else
-					colvalue = 'unknown';
-					text = sprintf('%s %s="%s"', text, colname, colvalue);
-					warning('Only simple cell matrix is supported!');
-				end
-			end
-			text = sprintf('%s/>\n', text);
-			xmlstr = [xmlstr text];
-		end
-	else % complex cell
-		nIndent = nIndent + 1;
-		m = numel(var);
-		for i = 1 : m
-			subname = 'cell';
-			subvar  = var{i};
-			head = sprintf('%s<%s>\n', char(indstr), name);
-			foot = sprintf('%s</%s>\n', char(indstr), name);
-			body = mat2xfrag(nIndent, subvar, subname);
-			text = [head body foot];
-			xmlstr = [xmlstr text];
-		end
-	end
+    if s_simpleCell(var) % simple cell matrix
+        for i = 1 : m
+            text = [indstr, '<', name];
+            for j = 1 : n
+                colname = s_getColName(j, atname);
+                colvalue = var{i,j};
+                if isempty(colvalue)
+                    colvalue = '';
+                end
+                if isnumeric(colvalue) || islogical(colvalue)
+                    text = sprintf('%s %s="%g"', text, colname, colvalue);
+                elseif ischar(colvalue)
+                    text = sprintf('%s %s="%s"', text, colname, colvalue);
+                else
+                    colvalue = unknown;
+                    text = sprintf('%s %s="%s"', text, colname, colvalue);
+                    warning('Only simple cell matrix is supported!');
+                end
+            end
+            text = sprintf('%s/>\n', text);
+            xmlstr = [xmlstr text];
+        end
+    else % complex cell
+        nIndent = nIndent + 1;
+        m = numel(var);
+        for i = 1 : m
+            subname = 'cell';
+            subvar  = var{i};
+            head = sprintf('%s<%s>\n', char(indstr), name);
+            foot = sprintf('%s</%s>\n', char(indstr), name);
+            body = mat2xfrag(nIndent, subvar, subname);
+            text = [head body foot];
+            xmlstr = [xmlstr text];
+        end
+    end
 
 elseif isstruct(var) % struct
 
-	nIndent = nIndent + 1;
-	m = numel(var);
-	for i = 1 : m
-		head = sprintf('%s<%s>\n', char(indstr), name);
-		foot = sprintf('%s</%s>\n', char(indstr), name);
+    nIndent = nIndent + 1;
+    m = numel(var);
+    for i = 1 : m
+        head = sprintf('%s<%s>\n', char(indstr), name);
+        foot = sprintf('%s</%s>\n', char(indstr), name);
 
-		body = '';
-		subnames = fieldnames(var(i));
-		n = length(subnames);
-		for j = 1 : n
-			subvar = getfield(var(i), subnames{j});
-			subxml = mat2xfrag(nIndent, subvar, subnames{j});
-			body = [body subxml];
-		end
+        body = '';
+        subnames = fieldnames(var(i));
+        n = length(subnames);
+        for j = 1 : n
+            subvar = getfield(var(i), subnames{j});
+            subxml = mat2xfrag(nIndent, subvar, subnames{j});
+            body = [body subxml];
+        end
 
-		text = [head body foot];
-		xmlstr = [xmlstr text];
-	end
+        text = [head body foot];
+        xmlstr = [xmlstr text];
+    end
 
 else
-	xmlstr = sprintf('%s<%s %s="%s"/>\n', char(indstr), name, 'A', unknown);
-	warning('Ignore unknow datetype!');
+    xmlstr = sprintf('%s<%s %s="%s"/>\n', char(indstr), name, 'A', unknown);
+    warning('Ignore unknow datetype!');
 end
 
 end %-of main
 
 %%---- sub function -----%%
 
-% å–å‡ºåˆ—å
-% é»˜è®¤è§„åˆ™ï¼Œå‰26åˆ—ç”¨Aï¼Zï¼Œå¤§äº26ï¼Œåˆ™ç”¨'C27'æ ¼å¼
+% È¡³öÁĞÃû
+% Ä¬ÈÏ¹æÔò£¬Ç°26ÁĞÓÃA£­Z£¬´óÓÚ26£¬ÔòÓÃ'C27'¸ñÊ½
 function colname = s_getColName(ind, atname)
 
-% é»˜è®¤åˆ—å
+% Ä¬ÈÏÁĞÃû
 defaultName =  ['A' : 'Z'];
 colname = '';
 
 if isempty(atname)
-	if ind <=26
-		colname = defaultName(ind);
-	else
-		colname = sprintf('C%d', ind);
-	end
+    if ind <=26
+        colname = defaultName(ind);
+    else
+        colname = sprintf('C%d', ind);
+    end
 else
-	if ischar(atname)
-		colname = atname(ind, :);
-	elseif iscellstr(atname)
-		colname = atname{ind};
-	else
-		error('The Attribute Name Require string or cellstr!');
-	end
+    if ischar(atname)
+        colname = atname(ind, :);
+    elseif iscellstr(atname)
+        colname = atname{ind};
+    else
+        error('The Attribute Name Require string or cellstr!');
+    end
 end
 
 end %-of getColName
 
-% åˆ¤æ–­æ˜¯ä¸å¦ç®€å• cell matrixï¼Œåªå«å­—ç¬¦ä¸²æˆ–æ•°å­—æ ‡é‡
+% ÅĞ¶ÏÊÇ²»·ñ¼òµ¥ cell matrix£¬Ö»º¬×Ö·û´®»òÊı×Ö±êÁ¿»ò¿ÕÖµ
 function tf = s_simpleCell(var)
 tf = true;
 if ~iscell(var)
-	tf = flase;
-	return;
+    tf = flase;
+    return;
 end
 [m n] = size(var);
 for i = 1 : m
-	for j = 1 : n
-		value = var{i, j};
-		if ~ischar(value) && ~isnumeric(value) && ~islogical(value)
-			tf = false;
-			return;
-		end
-		if ~ischar && length(value) > 1
-			tf = false;
-			return;
-		end
-	end
+    for j = 1 : n
+        value = var{i, j};
+        if isempty(value)
+            continue;
+        end
+
+        if ~ischar(value) && ~isnumeric(value) && ~islogical(value)
+            tf = false;
+            if ischar(value) && ~isrow(value) > 1
+                tf = false;
+            elseif ~isscalar(value)
+                tf = false;
+            end
+        end
+
+        if ~tf
+            return;
+        end
+    end
 end
 end %-of simpleCell
 
