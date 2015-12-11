@@ -20,46 +20,51 @@
 %
 
 if 1 == exist('Area_', 'var')
-	disp('A project is open already!')
-	disp('check and close the current project using `closear` first!')
+    disp('A project is open already!')
+    disp('check and close the current project using `closear` first!')
 
 else
 
-	a_list = dir('*_ar.mat');
-	if length(a_list) > 0
+    a_list = dir('*_ar.mat');
+    if length(a_list) > 0
 
-		% 打开当前目录下的项目
-		clear all;
+        % 打开当前目录下的项目
+        clear all;
 
-		a_list = dir('*_ar.mat');
-		a_prjname = a_list(1).name;
-		Area_ = openar_fun(a_prjname);
-		load(Area_.workspace);
+        a_list = dir('*_ar.mat');
+        a_prjname = a_list(1).name;
+        Area_ = openar_fun(a_prjname);
+        load(Area_.workspace);
 
-		disp(['Area is opend: ', Area_.name]);
-		hisarea(Area_.base, Area_.project);
-		clear -regexp ^a_;
+        disp(['Area is opend: ', Area_.name]);
+        hisarea(Area_.base, Area_.project);
+        clear -regexp ^a_;
 
-	else
+    else
 
-		% 寻找历史项目记录
-		disp('No any *_ar.mat project file found in pwd!');
-		disp('Try project file in history list');
+        % 寻找历史项目记录
+        disp('No any *_ar.mat project file found in pwd!');
+        disp('Try project file in history list');
 
-		[a_dir, a_file] = areas(0);
+        [a_dir, a_file] = areas(1);
 
-		if 2 == exist([a_dir, filesep, a_file], 'file')
-			clear all;
-			[a_dir, a_file] = areas(0);
-			cd(a_dir);
-			Area_ = openar_fun(a_file);
-			load(Area_.workspace);
-			disp(['Area is opend: ', Area_.name]);
-			clear -regexp ^a_;
-		else
-			disp('Open area fails!');
-		end
+        if 2 == exist([a_dir, filesep, a_file], 'file')
+            clear all;
+            [a_dir, a_file] = areas(1);
+            cd(a_dir);
+            Area_ = openar_fun(a_file);
+            load(Area_.workspace);
+            disp(['Area is opend: ', Area_.name]);
+            clear -regexp ^a_;
+        else
+            disp('Open area fails!');
+        end
 
-	end
+    end
+
+    % 换用 Area 类管理
+    if exist('Area_', 'var') == 1 && exist('Area', 'class')
+        Area_ = Area(Area_);
+    end
 
 end

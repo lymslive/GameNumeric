@@ -12,10 +12,10 @@
 % maintain: lymslive / 2015-11
 %
 
-if 1 == exist('Area_')
-	closear_fun(Area_);
-	savear;
-	clear all;
+if 1 == exist('Area_', 'var')
+    closear_fun(Area_);
+    savear;
+    clear all;
 else
-	disp('No area seems opened');
+    disp('No area seems opened');
 end

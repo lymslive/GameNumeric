@@ -28,21 +28,21 @@ prj = struct;
 
 if nargin >= 1
 
-	if ~isdir(name)
-		[status, message] = mkdir(name);
-		if ~status
-			error(message);
-		end
-	end
+    if ~isdir(name)
+        [status, message] = mkdir(name);
+        if ~status
+            error(message);
+        end
+    end
 
-	cd(name);
-	prj.base = pwd;
-	prj.name = name;
+    cd(name);
+    prj.base = pwd;
+    prj.name = name;
 
 else
-	prj.base = pwd;
-	[pathstr, name, ext] = fileparts(prj.base);
-	prj.name = name;
+    prj.base = pwd;
+    [pathstr, name, ext] = fileparts(prj.base);
+    prj.name = name;
 end
 
 prj.project = [name, '_ar.mat'];
@@ -55,13 +55,13 @@ prj.subpath{1} = '.';
 % 只搜索直接子目录，不递归
 sublist = dir();
 for i = 1 : length(sublist)
-	sub = sublist(i);
-	if sub.isdir && ~strcmp(sub.name, '.') && ~strcmp(sub.name, '..')
-		if length( dir([sub.name, filesep, '*.m']) ) > 0 ... 
-			|| length( dir([sub.name, filesep, '*.mat']) ) > 0 
-			prj.subpath{end+1} = sub.name;
-		end
-	end
+    sub = sublist(i);
+    if sub.isdir && ~strcmp(sub.name, '.') && ~strcmp(sub.name, '..')
+        if length( dir([sub.name, filesep, '*.m']) ) > 0 ... 
+            || length( dir([sub.name, filesep, '*.mat']) ) > 0 
+            prj.subpath{end+1} = sub.name;
+        end
+    end
 end
 
 prj.workspace = [name, '_ws.mat'];

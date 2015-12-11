@@ -5,16 +5,16 @@
 % ÒÆ³ýÌí¼ÓµÄ .subpath, »Ö¸´ Matlab Â·¾¶
 %
 % maintain: lymslive / 2015-11
-function closear(prj)
+function closear_fun(prj)
 
 if isfield(prj, 'subpath') && iscellstr(prj.subpath)
-	for i = 1 : length(prj.subpath)
-		sub = prj.subpath{i};
-		fullpath = [prj.base, filesep, sub];
-		warning('off','MATLAB:rmpath:DirNotFound');
-		rmpath(fullpath);
-		warning('on','MATLAB:rmpath:DirNotFound');
-	end
+    for i = 1 : length(prj.subpath)
+        sub = prj.subpath{i};
+        fullpath = [prj.base, filesep, sub];
+        warning('off','MATLAB:rmpath:DirNotFound');
+        rmpath(fullpath);
+        warning('on','MATLAB:rmpath:DirNotFound');
+    end
 end
 
 end %-of main
