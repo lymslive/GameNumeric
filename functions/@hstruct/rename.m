@@ -2,6 +2,10 @@ function tf = rename(me, oldfield, newfield)
 % rename a field in the struct.
 % the old and new field names must be vaild string for varname
 %
+% return true if rename success, or false if fails
+%
+% attention: the renamed field not persist the order, new field added last.
+%
 % maintain: lymslive / 2015-12-11
 
 tf = false;
@@ -26,7 +30,7 @@ end
 try
     me.set(newfield, val);
     me.set(oldfield, []);
-    fprintf('rename@hstrunt: Rename field %s --> %s\n', oldfield, newfield');
+    fprintf('Rename field %s --> %s\n', oldfield, newfield');
     tf = true;
 catch
     fprintf('rename@hstrunt: Fails to rename field %s --> %s\n', oldfield, newfield');
