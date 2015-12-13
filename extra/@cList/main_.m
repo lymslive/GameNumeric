@@ -60,7 +60,7 @@ fprintf('test type() and cat()\n');
 datatype = stack.type();
 assert(strcmp(datatype, class(1)), 'type() fails?');
 vector = stack.cat();
-assert(all(vector == [1:5]'), 'cat() fails?');
+assert(all(vector == [1:5]), 'cat() fails?');
 disp(datatype);
 disp(vector);
 reply = s_pause(reply);
@@ -85,7 +85,7 @@ oldstack,
 reply = s_pause(reply);
 
 fprintf('construct from varargin:\n');
-list = cList('abc', 'bcd', 'cde', 'def');
+list = cList('a', 'bc', 'def', 'ghijk');
 list,
 reply = s_pause(reply);
 fprintf('test iterator():\n');
@@ -114,6 +114,11 @@ while val
     val = next();
 end
 reply = s_pause(reply);
+
+fprintf('test cat string: list.cat()\n');
+catstr = list.cat();
+disp(catstr);
+assert(strcmp(catstr, ['a' : 'k']), 'string cat fails?');
 
 disp('test ended');
 tf = true;

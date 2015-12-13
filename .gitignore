@@ -11,3 +11,6 @@ Session.vim
 *.asv
 *.mat
 *.mat
+ 
+# tmp work
+tmp/

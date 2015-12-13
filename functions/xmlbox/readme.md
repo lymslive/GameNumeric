@@ -30,6 +30,7 @@ matlab 变量 xml 化
 - xsave.m : 将一个变量保存为 xml 文件，或 xml 格式字符串
 - xwsave.m : 将当前工作区的所有变量保存在 mworkspace.xml 文件中
 - mat2xfrag.m : 被 xsave 调用的工具方法，将 matlab 变量转化为 xml 片断文本
+- mat2xframe.m : 只保存变量的结构框架信息，类型、维度、域、元胞内容类型等
 
 一套类处理工具
 -------

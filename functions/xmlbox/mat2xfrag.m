@@ -20,7 +20,7 @@ function xmlstr = mat2xfrag(leader, var, name, atname)
 Debug = false;
 if Debug && nargin < 1
     s_test();
-    xmlstr = 'Debug mode test end!';
+    xmlstr = '<debug test="true"/>';
     return;
 end
 
@@ -38,6 +38,9 @@ unknown = '#unknown';
 
 % 默认变量名
 if nargin < 3 || isempty(name)
+    name = inputname(2);
+end
+if ~isvarname(name)
     name = class(var);
 end
 if nargin < 4
@@ -45,7 +48,7 @@ if nargin < 4
 end
 
 % table 转为 cell 保存
-if istable(var)
+if exist('istable', 'builtin') == 5 && istable(var)
     if isempty(atname)
         atname = var.Properties.VariableNames;
     end

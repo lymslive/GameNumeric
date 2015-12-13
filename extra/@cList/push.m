@@ -22,8 +22,8 @@ case 1
     val = me.top();
 
 case 2
-    index = me.count + 1;
     val = index;
+    index = me.count + 1;
 
 case 3
     if ~isnumeric(index) || numel(index) ~= 1
