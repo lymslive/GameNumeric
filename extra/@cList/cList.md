@@ -95,6 +95,8 @@ down() 的参数形式相似，只不过将第 i 元素向第 1 个元素移动�
 注意 isenmpty 内置方法是判断对象变量本身是否为空，在 Matlab 中认为任一变量都有
 可能出现 0x0 大小的情况。me.isemptied() 则是判断我内部的 cell 列向量是否为空。
 
+- of(); 查找某个元素在列表中的位置。index = me.of(val, [cmpfun_handle])
+
 
 迭代方法
 -------
