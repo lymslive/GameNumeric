@@ -11,6 +11,10 @@ function v = cellout(c)
 % Remark:
 %  if c is cellstr, cellout will jion each row string with a extra '\n'
 %
+% Seealso:
+%  cell2mat dose nearly the same thing.
+%  cellin, it may do the oposite thing as cellout
+%
 %  maintain: lymslive / 2015-12-15
 
 if ~iscell(c)
@@ -18,18 +22,24 @@ if ~iscell(c)
 
 elseif iscellstr(c)
     n = size(c, 1);
-    row = cell(n, 1);
-    for i = 1 : n
-        row{i} = sprintf('%s\n', [c{i,:}]);
+    if n > 1
+        row = cell(n, 1);
+        for i = 1 : n-1
+            row{i} = sprintf('%s\n', [c{i,:}]);
+        end
+        row{n} = [c{n,:}];
+        v = [row{:}];
+    else
+        v = [c{1, :}];
     end
-    v = [row{:}];
 
 else
-    n = numel(c);
-    for i = n :-1 : 1
-        v(i) = c{i};
+    try
+        v = cell2mat(c);
+    catch
+        disp('the cell has different datatype and cannot be cellout');
+        v = [];
     end
-    v = reshape(v, size(c));
 
 end
 
