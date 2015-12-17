@@ -111,6 +111,9 @@ elseif ischar(index) && size(index, 1) <= 1
         catch
             error('col@htable: no such column name: %s', index);
         end
+        if uindex > me.col()
+            unidex = 0;
+        end
     end
 
 elseif iscellstr(index)
