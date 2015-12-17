@@ -11,14 +11,16 @@ if nargin < 2
     maxdisp = 10;
 end
 
+fprintf('%s = \n', inputname(1));
+
 if isempty(me)
-    fprintf('= empty cList object array\n');
+    fprintf('  empty cList object array\n');
     return;
 elseif numel(me) > 1
-    fprintf('= cList object array with size %s\n', mat2str(size(me)));
+    fprintf('  cList object array with size %s\n', mat2str(size(me)));
     return;
 elseif me.isemptied()
-    fprintf('= a cList object with empty list\n');
+    fprintf('  a cList object with empty list\n');
     return;
 end
 t = me.type();
@@ -26,7 +28,7 @@ if ~t
     t = 'Mixed';
 end
 
-fprintf('= cList object, with [%d] elements of <%s> type.\n', me.count, t);
+fprintf('  cList object, with [%d] elements of <%s> type.\n', me.count, t);
 
 if ~strcmp(t, 'Mixed')
     if isnumeric(me.top())
