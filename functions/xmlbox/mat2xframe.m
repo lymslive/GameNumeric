@@ -13,6 +13,11 @@ function xmlstr =  mat2xframe(leader, var, name)
 %   with name as the tag of root, that describe information of the variable,
 %   but contain no actually data value.
 %
+% Remark:
+%   for cell array with the same content type, it output only one <cell>
+%   element and anthor <cell continued="n"/> element, where n is the count of
+%   continuous similar cells added the above one.
+%
 % maintain: lymslive / 2012-12-12
 
 Debug = false;
@@ -78,10 +83,30 @@ elseif iscell(var)
     xml.push(openline);
 
     leader = leader + 1;
-    for i = 1 : numel(var)
+    lastcell = '';
+    repeated = 1;
+    n = numel(var);
+    for i = 1 : n
         xcell = mat2xframe(leader, var{i}, 'cell');
         linestr = sprintf('%s\n', xcell);
-        xml.push(linestr);
+
+        flag = strcmp(linestr, lastcell);
+        if flag
+            repeated = repeated + 1;
+        end
+
+        if ~flag || i == n
+            if repeated > 1
+                markline = repmat(indenstr, 1, leader);
+                markline = sprintf('%s<cell continued="%d"/>\n', markline, repeated);
+                xml.push(markline);
+                repeated = 1;
+            end
+            if ~flag
+                xml.push(linestr);
+                lastcell = linestr;
+            end
+        end
     end
 
     closeline = sprintf('%s</%s>', leadstr, name);
