@@ -10,42 +10,46 @@ function out = subsref(me, index)
 switch index(1).type
 
 case '.'
-	if numel(me) > 1
-		error('user:hstruct:subsref', ...
-		'dot index only support scalar object');
-	end
+    if numel(me) > 1
+        error('user:hstruct:subsref', ...
+        'dot index only support scalar object');
+    end
 
-	name = index(1).subs;
-	if strcmp(name, 'stin_')
-		error('usr:hstrcut:subsref', 'Private property');
-	elseif ismember(name, methods(class(me)))
-		out = builtin('subsref', me, index);
-	else
-		try
-			out = me.stin_.(name);
-		catch
-			out = [];
-		end
-		if length(index) > 1
-			out = subsref(out, index(2:end));
-		end
-	end
+    name = index(1).subs;
+    if strcmp(name, 'stin_')
+        error('usr:hstrcut:subsref', 'Private property');
+    elseif ismember(name, methods(class(me)))
+        if nargout == 0
+            builtin('subsref', me, index);
+        else
+            out = builtin('subsref', me, index);
+        end
+    else
+        try
+            out = me.stin_.(name);
+        catch
+            out = [];
+        end
+        if length(index) > 1
+            out = subsref(out, index(2:end));
+        end
+    end
 
 case '()'
-	subme = me(index(1).subs{:});
-	if length(index) == 1
-		out = subme;
-	else
-		out = subsref(subme, index(2:end));
-	end
+    subme = me(index(1).subs{:});
+    if length(index) == 1
+        out = subme;
+    else
+        out = subsref(subme, index(2:end));
+    end
 
 case '{}'
-	error('user:hstruct:subsref', ...
-	'hstrcut objects, not a cell array');
+    error('user:hstruct:subsref', ...
+    'hstrcut objects, not a cell array');
 
 otherwise
-	error('user:hstruct:subsref', ...
-	'Unexpected index.type of %s', index(1).type);
+    error('user:hstruct:subsref', ...
+    'Unexpected index.type of %s', index(1).type);
 
 end %S
 

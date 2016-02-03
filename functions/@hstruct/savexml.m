@@ -61,7 +61,7 @@ end
 if mode == 1 || mode == 3
     xml = s_savedata(me, rootname);
     if nargout == 0
-        if ~rexgexpi(file, '.xml')
+        if ~regexpi(file, '.xml')
             file = [file, '_d.xml'];
         end
         fid = fopen(file, 'w');
@@ -75,7 +75,7 @@ end
 if mode == 2 || mode == 3
     xml = s_saveframe(me, rootname);
     if nargout == 0
-        if ~rexgexpi(file, '.xml')
+        if ~regexpi(file, '.xml')
             file = [file, '_f.xml'];
         end
         fid = fopen(file, 'w');
