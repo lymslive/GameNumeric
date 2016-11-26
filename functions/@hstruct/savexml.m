@@ -29,6 +29,7 @@ if narg < 1 || isempty(varargin{1})
     rootname = inputname(1);
 else
     rootname = varargin{1};
+    varargin(1) = [];
 end
 
 if ~isvarname(rootname)

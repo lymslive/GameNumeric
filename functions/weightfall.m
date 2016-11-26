@@ -1,4 +1,4 @@
-function index = weigthfall(pvector, rate)
+function index = weightfall(pvector, rate)
 % determine where a rand number will fall, given a probability vector.
 % each element has the corresponding change to the value in the vector.
 %
